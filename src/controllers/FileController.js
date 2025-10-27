@@ -102,7 +102,7 @@ export const uploadFile = [
 // 🔹 Get all files for logged-in user
 export const getFiles = async (req, res, next) => {
   try {
-    const files = await File.find({ userId: req.userId })
+    const files = await File.find({ userId: req.user?._id })
       .sort({ createdAt: -1 })
       .populate('aiInsightId');
     res
