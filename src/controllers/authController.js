@@ -161,6 +161,38 @@ export const ResendVerification = async (req, res, next) => {
 
 // this function is used to forget password featrue
 
+// export const ForgotPassword = async (req, res, next) => {
+//   try {
+//     const { email } = req.body;
+//     const user = await User.findOne({ email });
+
+//     if (!user) throw new ApiError(404, "User not found");
+
+//     const token = jwt.sign(
+//       { userId: user._id },
+//       process.env.RESET_PASSWORD_SECRET, // secret key
+//       { expiresIn: "10m" } // expires in 10 minutes
+//     );
+
+//     await sendEmail(
+//       user.email,
+//       "Reset Your Password",
+//       user.username,
+//       ``,
+//       "Reset Your Password",
+//       `To reset your password, please use the verification code below. <br />
+// This link expires in <strong>10 minute</strong>.`,
+//       `resetPassword/${token}`
+//     );
+
+//     res
+//       .status(200)
+//       .json(new ApiResponse(200, null, "Reset link sent to your email"));
+//   } catch (err) {
+//     next(err);
+//   }
+// };
+
 export const ForgotPassword = async (req, res, next) => {
   try {
     const { email } = req.body;
@@ -174,20 +206,20 @@ export const ForgotPassword = async (req, res, next) => {
       { expiresIn: "10m" } // expires in 10 minutes
     );
 
-    await sendEmail(
-      user.email,
-      "Reset Your Password",
-      user.username,
-      ``,
-      "Reset Your Password",
-      `To reset your password, please use the verification code below. <br />
-This link expires in <strong>10 minute</strong>.`,
-      `resetPassword/${token}`
-    );
+    //     await sendEmail(
+    //       user.email,
+    //       "Reset Your Password",
+    //       user.username,
+    //       ``,
+    //       "Reset Your Password",
+    //       `To reset your password, please use the verification code below. <br />
+    // This link expires in <strong>10 minute</strong>.`,
+    //       `resetPassword/${token}`
+    //     );
 
     res
       .status(200)
-      .json(new ApiResponse(200, null, "Reset link sent to your email"));
+      .json(new ApiResponse(200, { url: `https://healthmate-gray.vercel.app/resetPassword/${token}` }, "Reset link sent to your email"));
   } catch (err) {
     next(err);
   }
