@@ -20,7 +20,7 @@ export const addVital = async (req, res, next) => {
 
 export const getVitals = async (req, res, next) => {
   try {
-    const vitals = await Vital.find({ userId: req.userId?._id }).sort({ date: -1 });
+    const vitals = await Vital.find({ userId: req?.user?._id }).sort({ date: -1 });
     res
       .status(200)
       .json(
