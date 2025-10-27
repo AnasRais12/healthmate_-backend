@@ -37,7 +37,7 @@ export const getVitals = async (req, res, next) => {
 export const deleteVital = async (req, res, next) => {
   try {
     const { id } = req.params; // frontend se id aayegi e.g. /vitals/:id
-    const userId = req.userId?._id;
+    const userId = req.user?._id;
 
     // Check if record exists and belongs to current user
     const vital = await Vital.findOne({ _id: id, userId });
