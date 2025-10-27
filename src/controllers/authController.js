@@ -7,6 +7,56 @@ import { ApiError, ApiResponse } from "../utils/CustomResponse.js";
 import jwt from "jsonwebtoken";
 
 
+// export const Signup = async (req, res, next) => {
+//   try {
+//     const { username, email, password } = req.body;
+
+//     const userExists = await User.findOne({
+//       $or: [{ email: email }, { username: username }],
+//     });
+
+//     if (userExists) {
+//       throw new ApiError(
+//         400,
+//         userExists.email === email
+//           ? "Email already exists"
+//           : "Username already exists"
+//       );
+//     }
+
+//     const hashedPassword = await bcrypt.hash(password, 10);
+//     const verifyCode = generateCode(6);
+//     const user = await User.create({
+//       username,
+//       email,
+//       isVerified: false,
+//       password: hashedPassword,
+//       verificationCode: verifyCode,
+//       expiresAt: new Date(Date.now() + 90 * 1000),
+//     });
+
+//     await sendEmail(
+//       email,
+//       "Verify your email",
+//       username,
+//       verifyCode
+//     );
+
+//     res
+//       .status(201)
+//       .json(
+//         new ApiResponse(
+//           201,
+//           user.getPublicProfile(),
+//           "User registered successfully"
+//         )
+//       );
+//   } catch (err) {
+//     next(err); // ✅ pass to global error handler
+//   }
+// };
+
+
 export const Signup = async (req, res, next) => {
   try {
     const { username, email, password } = req.body;
@@ -29,18 +79,19 @@ export const Signup = async (req, res, next) => {
     const user = await User.create({
       username,
       email,
-      isVerified: false,
+      // isVerified:false ,
+      isVerified: true,
       password: hashedPassword,
-      verificationCode: verifyCode,
-      expiresAt: new Date(Date.now() + 90 * 1000),
+      verificationCode: null,
+      expiresAt: null,
     });
 
-    await sendEmail(
-      email,
-      "Verify your email",
-      username,
-      verifyCode
-    );
+    // await sendEmail(
+    //   email,
+    //   "Verify your email",
+    //   username,
+    //   verifyCode
+    // );
 
     res
       .status(201)
@@ -55,7 +106,6 @@ export const Signup = async (req, res, next) => {
     next(err); // ✅ pass to global error handler
   }
 };
-
 
 export const SignIn = async (req, res, next) => {
   try {
