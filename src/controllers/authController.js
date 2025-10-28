@@ -374,7 +374,7 @@ export const changePassword = async (req, res, next) => {
 
 
 
-export const userExist = async (req, res, next) => {
+export const googleLogin = async (req, res, next) => {
   try {
     const { email, } = req.body;
     const user = await User.findOne({ email });
