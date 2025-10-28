@@ -369,3 +369,28 @@ export const changePassword = async (req, res, next) => {
     next(err);
   }
 };
+
+
+
+
+
+export const userExist = async (req, res, next) => {
+  try {
+    const { email, } = req.body;
+    const user = await User.findOne({ email });
+
+    if (!user) throw new ApiError(404, "User not found");
+    const token = generateToken(user);
+    res
+      .status(200)
+      .json(
+        new ApiResponse(
+          200,
+          { user: user?.getPublicProfile(), token },
+          "Login success"
+        )
+      );
+  } catch (err) {
+    next(err);
+  }
+};
