@@ -8,6 +8,7 @@ import {
   ResetPassword,
   updateProfile,
   changePassword,
+    googleLogin,
 } from "../controllers/authController.js";
 import upload from "../middleware/Upload.js";
 import { isAuthenticated } from "../middleware/authMiddleware.js";
@@ -22,6 +23,7 @@ AuthRouter.post("/sendPasswordLink", ForgotPassword);
 AuthRouter.post("/resetPassword", ResetPassword);
 AuthRouter.post("/updateProfile", isAuthenticated, upload.single("avatar"), updateProfile);
 AuthRouter.post("/changePassword", isAuthenticated, changePassword);
+AuthRouter.post("/googleLogin", googleLogin);
 
 
 
