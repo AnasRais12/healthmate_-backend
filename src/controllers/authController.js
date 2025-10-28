@@ -376,11 +376,35 @@ export const changePassword = async (req, res, next) => {
 
 export const googleLogin = async (req, res, next) => {
   try {
-    const { email, } = req.body;
+    const { email,username,avatar } = req.body;
     const user = await User.findOne({ email });
 
-    if (!user) throw new ApiError(404, "User not found");
-    const token = generateToken(user);
+    if (!user){
+       const hashedPassword = await bcrypt.hash(username + 123, 10);
+           const user = await User.create({
+      username,
+      email,
+      // isVerified:false ,
+      isVerified: true,
+      password: hashedPassword,
+      verificationCode: null,
+      expiresAt: null,
+      avatar:avatar,
+    });
+     const token = generateToken(user);
+        res
+      .status(201)
+      .json(
+        new ApiResponse(
+          201,
+            { user: user?.getPublicProfile(), token },
+          "User registered successfully"
+        )
+      );
+    }
+
+    else {
+ const token = generateToken(user);
     res
       .status(200)
       .json(
@@ -390,7 +414,60 @@ export const googleLogin = async (req, res, next) => {
           "Login success"
         )
       );
+    }
+   
   } catch (err) {
     next(err);
   }
 };
+
+
+// export const Signup = async (req, res, next) => {
+//   try {
+//     const { username, email, password } = req.body;
+
+//     const userExists = await User.findOne({
+//       $or: [{ email: email }, { username: username }],
+//     });
+
+//     if (userExists) {
+//       throw new ApiError(
+//         400,
+//         userExists.email === email
+//           ? "Email already exists"
+//           : "Username already exists"
+//       );
+//     }
+
+//     const hashedPassword = await bcrypt.hash(password, 10);
+//     const verifyCode = generateCode(6);
+//     const user = await User.create({
+//       username,
+//       email,
+//       // isVerified:false ,
+//       isVerified: true,
+//       password: hashedPassword,
+//       verificationCode: null,
+//       expiresAt: null,
+//     });
+
+//     // await sendEmail(
+//     //   email,
+//     //   "Verify your email",
+//     //   username,
+//     //   verifyCode
+//     // );
+
+//     res
+//       .status(201)
+//       .json(
+//         new ApiResponse(
+//           201,
+//           user.getPublicProfile(),
+//           "User registered successfully"
+//         )
+//       );
+//   } catch (err) {
+//     next(err); // ✅ pass to global error handler
+//   }
+// };
