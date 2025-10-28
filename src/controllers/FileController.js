@@ -16,7 +16,7 @@ const streamUpload = (buffer, mimetype) =>
     const stream = cloudinary.uploader.upload_stream(
       {
         folder: "loan-docs",
-        resource_type: resourceType, // 👈 yahan fix
+        resource_type: "auto", // 👈 yahan fix
         access_mode: "public",
         use_filename: true,
         unique_filename: false,
