@@ -308,6 +308,7 @@ export const updateProfile = async (req, res, next) => {
     const name = req.body.username;
     const email = req.body.email;
     let avatarUrl = null;
+    const provider = req.body.provider
 
     // Agar avatar file aayi ho (Multer ke through)
     if (req.file) {
@@ -329,6 +330,10 @@ export const updateProfile = async (req, res, next) => {
 
     const userWithoutPassword = user.toObject();
     delete userWithoutPassword.password;
+
+    if(provider){
+        userWithoutPassword.provider = "google";
+    }
 
     res
       .status(200)
